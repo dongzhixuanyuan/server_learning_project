@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+    <!--    <context-param>-->
+    <!--        <param-name>url</param-name>-->
+    <!--        <param-value>jdbc:mysql://localhost:3306/test</param-value>-->
+    <!--    </context-param>-->
+
+    <!--    <welcome-file-list>-->
+    <!--        <welcome-file>index.html</welcome-file>-->
+    <!--    </welcome-file-list>-->
+    <session-config>
+        <session-timeout>15</session-timeout>
+    </session-config>
+
+<!--    <error-page>-->
+<!--        <error-code>404</error-code>-->
+<!--        <location></location>-->
+<!--    </error-page>-->
+
+
+    <servlet>
+        <servlet-name>Hello</servlet-name>
+        <servlet-class>com.liudong.Hello</servlet-class>
+        <load-on-startup>1</load-on-startup>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>liudong</param-value>
+        </init-param>
+        <init-param>
+            <param-name>password</param-name>
+            <param-value>123</param-value>
+        </init-param>
+        <init-param>
+            <param-name>charset</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>Hello</servlet-name>
+        <url-pattern>/servlet/hello</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>Hello2</servlet-name>
+        <servlet-class>com.liudong.Hello2</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>Hello2</servlet-name>
+        <url-pattern>/servlet/hello2</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>Hellodispatch</servlet-name>
+        <servlet-class>com.liudong.HelloDispatcher</servlet-class>
+
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Hellodispatch</servlet-name>
+        <url-pattern>/servlet/dispatch</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>resReadServlet</servlet-name>
+        <servlet-class>com.liudong.ResourceReadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>resReadServlet</servlet-name>
+        <url-pattern>/servlet/resoure</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>expireServlet</servlet-name>
+        <servlet-class>com.liudong.ExpireServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>expireServlet</servlet-name>
+        <url-pattern>/servlet/expire</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>download</servlet-name>
+        <servlet-class>com.liudong.DownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>download</servlet-name>
+        <url-pattern>/servlet/downpit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>chinese</servlet-name>
+        <servlet-class>com.liudong.CharsetServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>chinese</servlet-name>
+        <url-pattern>/servlet/chinese</url-pattern>
+    </servlet-mapping>
+
+</web-app>
