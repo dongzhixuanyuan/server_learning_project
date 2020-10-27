@@ -21,7 +21,6 @@ class CookieServlet : BaseServlet() {
     override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
         resp.characterEncoding = "UTF-8"
         resp.contentType = "text/html;charset=UTF-8"
-
         req.cookies?.forEach {
             if (it.name == "lastAccessTime") {
                 resp.writer.write(Date(it.value.toLong()).toLocaleString())
