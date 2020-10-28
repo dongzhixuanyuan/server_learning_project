@@ -2,6 +2,10 @@ package dbdemo.repositoty
 
 import dbdemo.entity.Student
 import dbdemo.util.JdbcUtils
+import org.apache.commons.dbutils.DbUtils
+import org.apache.commons.dbutils.QueryRunner
+import org.apache.commons.dbutils.handlers.BeanHandler
+import org.apache.commons.dbutils.handlers.BeanListHandler
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
@@ -26,8 +30,10 @@ class StudentRepository {
 
 
     fun listAllStudent(): List<Student> {
-        val result = JdbcUtils.datasource.getConnection().prepareStatement("select * from student").executeQuery()
-        return queryResultToStudentList(result)
+//        val result = JdbcUtils.datasource.getConnection().prepareStatement("select * from student").executeQuery()
+        val queryRunner = QueryRunner()
+        var result =  queryRunner.query(JdbcUtils.datasource.connection,"select * from student",BeanListHandler(Student::class.java))
+        return result
     }
 
     private fun queryResultToStudentList(result: ResultSet): MutableList<Student> {
@@ -41,10 +47,10 @@ class StudentRepository {
     }
 
     fun queryStudentById(id: Int): List<Student> {
-        val prepareStatement = JdbcUtils.datasource.getConnection().prepareStatement("select * from student where id = ?")
-        prepareStatement.setInt(1, id)
-        val queryResult = prepareStatement.executeQuery()
-        return queryResultToStudentList(queryResult)
+        val queryRunner = QueryRunner()
+       var result =  queryRunner.query(JdbcUtils.datasource.connection,"select * from student where id = ?",BeanListHandler(Student::class.java),id)
+        return result
+//        return queryResultToStudentList(queryResult)
     }
 
     fun deleteStudentById(id: Int): Int {
