@@ -1,4 +1,4 @@
-package com.liudong.repository
+package com.liudong.service.user
 
 import com.liudong.entity.User
 
@@ -6,9 +6,9 @@ import com.liudong.entity.User
  * @description 文件描述
  *
  * @author liudong (liudong@rd.netease.com)
- * @date 2020/10/31 6:19 下午
+ * @date 2020/10/31 6:06 下午
  */
-interface ILoginRepo {
+interface ILoginService {
 
     fun login(name: String, password: String): User?
 

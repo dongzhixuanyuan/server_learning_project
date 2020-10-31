@@ -1,4 +1,7 @@
-import com.liudong.repository.LoginRepoImp
+import com.liudong.entity.Book
+import com.liudong.entity.BookCase
+import com.liudong.repository.book.BookRepoImp
+import com.liudong.repository.user.LoginRepoImp
 
 /**
  * @description 文件描述
@@ -8,11 +11,33 @@ import com.liudong.repository.LoginRepoImp
  */
 object Test {
 
-
+    private val repository = BookRepoImp()
     @JvmStatic
     fun main(args: Array<String>) {
-        val login = LoginRepoImp().login("张三", "123")
-        assert(login != null)
+        generateBookCase()
     }
+
+
+    fun generateBook (){
+        for (i in 0..500) {
+            Book().apply {
+                name = (i%128).toChar().toString()
+                case
+            }
+        }
+    }
+
+    fun generateBookCase(){
+        for (i in 0..9) {
+            val case = BookCase().apply {
+                category_name = (i % 128 + 62).toChar().toString()
+            }
+            repository.insertBookCase(case)
+        }
+    }
+
+
+
+
 
 }

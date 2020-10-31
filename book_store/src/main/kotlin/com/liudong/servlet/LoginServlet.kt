@@ -2,7 +2,7 @@ package com.liudong.servlet
 
 import com.google.gson.Gson
 import com.liudong.http.ErrorRes
-import com.liudong.service.LoginServiceImp
+import com.liudong.service.user.LoginServiceImp
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

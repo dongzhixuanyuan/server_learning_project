@@ -1,8 +1,7 @@
-package com.liudong.repository
+package com.liudong.repository.user
 
 import com.liudong.entity.User
 import com.liudong.util.DbManager
-import org.apache.commons.dbutils.DbUtils
 import org.apache.commons.dbutils.QueryRunner
 import org.apache.commons.dbutils.handlers.BeanHandler
 

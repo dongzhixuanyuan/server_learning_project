@@ -1,7 +1,7 @@
-package com.liudong.service
+package com.liudong.service.user
 
 import com.liudong.entity.User
-import com.liudong.repository.LoginRepoImp
+import com.liudong.repository.user.LoginRepoImp
 
 /**
  * @description 文件描述
