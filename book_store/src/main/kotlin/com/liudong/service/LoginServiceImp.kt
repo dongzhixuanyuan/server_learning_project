@@ -21,4 +21,11 @@ class LoginServiceImp : ILoginService {
         }
         return loginRepo.login(name, password)
     }
+
+    override fun userRegister(name: String, password: String, number: String):User? {
+        if (name.isEmpty() || password.isEmpty()) {
+            return null
+        }
+        return loginRepo.userRegister(name, password, number)
+    }
 }

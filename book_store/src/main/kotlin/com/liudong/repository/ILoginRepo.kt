@@ -9,6 +9,9 @@ import com.liudong.entity.User
  * @date 2020/10/31 6:19 下午
  */
 interface ILoginRepo {
+
     fun login(name: String, password: String): User?
+
+    fun userRegister(name: String, password: String,number:String):User?
 
 }

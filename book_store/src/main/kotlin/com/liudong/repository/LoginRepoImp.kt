@@ -19,17 +19,52 @@ class LoginRepoImp : ILoginRepo {
         if (name.isEmpty() || password.isEmpty()) {
             return null
         }
-        val connection = DbManager.datasource.connection
-        val queryRunner = QueryRunner()
-        val user = queryRunner.query(
-            connection,
-            "select * from user where name = ? and password = ?",
-            BeanHandler(User::class.java),
-            name,
-            password
-        )
-        connection.close()
+        val connection = DbManager.getConnection()
+        var user: User? = null
+        try {
+            val queryRunner = QueryRunner()
+            val user = queryRunner.query(
+                connection,
+                "select * from user where name = ? and password = ?",
+                BeanHandler(User::class.java),
+                name,
+                password
+            )
+
+        } catch (e: Exception) {
+        } finally {
+            connection.close()
+        }
         return user
 
+    }
+
+    override fun userRegister(name: String, password: String, number: String): User? {
+        if (name.isEmpty() || password.isEmpty() || number.isNullOrEmpty()) {
+            return null
+        }
+        val connection = DbManager.getConnection()
+        var user: User? = null
+        try {
+            var queryRunner = QueryRunner()
+            val success = queryRunner.execute(
+                connection,
+                "insert into user (name ,password, number )values ('$name','$password','$number')"
+            )
+            if (success > 0) {
+                queryRunner = QueryRunner()
+                user = queryRunner.query(
+                    connection, "select * from user where name = ? and password = ?",
+                    BeanHandler(User::class.java),
+                    name,
+                    password
+                )
+            }
+        } catch (e: Exception) {
+
+        } finally {
+            connection.close()
+        }
+        return user
     }
 }

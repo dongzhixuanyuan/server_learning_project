@@ -2,6 +2,7 @@ package com.liudong.util
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import java.sql.Connection
 
 /**
  * @description 文件描述
@@ -10,7 +11,7 @@ import com.zaxxer.hikari.HikariDataSource
  * @date 2020/10/31 6:20 下午
  */
 object DbManager {
-    var datasource:HikariDataSource
+    private var datasource:HikariDataSource
     init {
         Class.forName("com.mysql.cj.jdbc.Driver")
         val config = HikariConfig().apply {
@@ -23,5 +24,9 @@ object DbManager {
         }
         datasource = HikariDataSource(config)
         print("成功获取数据库连接 ${datasource.toString()}")
+    }
+
+    fun getConnection():Connection {
+        return datasource.connection
     }
 }
