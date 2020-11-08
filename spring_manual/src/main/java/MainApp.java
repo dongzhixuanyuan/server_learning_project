@@ -20,15 +20,24 @@ public class MainApp {
         AbstractApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
 
 
-        HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
-        obj.getMessage();
-        obj.setMessage1("hello world 2");
+//        HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
+//        obj.getMessage();
+//        obj.setMessage1("hello world 2");
+//
+//        obj = ((HelloWorld) context.getBean("helloWorld"));
+//        obj.getMessage();
+//        context.getBean("goodBoy");
 
-        obj = ((HelloWorld) context.getBean("helloWorld"));
-        obj.getMessage();
-        context.getBean("goodBoy");
-
-
+        TextEditor editor = ((TextEditor) context.getBean("textEditor"));
+        editor.spellCheck();
+        Student student = ((Student) context.getBean("student"));
+        student.speak();
+        student.write();
+        JavaCollection collection = ((JavaCollection) context.getBean("javaCollection"));
+        System.out.println(collection.getAddressList());
+        System.out.println(collection.getAddressMap());
+        System.out.println(collection.getAddressProp());
+        System.out.println(collection.getAddressSet());
         context.registerShutdownHook();
 
 
