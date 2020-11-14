@@ -104,5 +104,15 @@
         <constructor-arg  index="0" type="int" value="100"/>
     </bean>
 
+    <bean id="source" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/TEST"/>
+        <property name="username" value="root"/>
+        <property name="password" value=""/>
+    </bean>
+    <bean id="studentjdbctemplate" class="db.StudentJDBCTemplate">
+        <property name="dataSource" ref="source"/>
+    </bean>
+
 
 </beans>

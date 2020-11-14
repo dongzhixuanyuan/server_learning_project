@@ -1,3 +1,5 @@
+import db.StudentJDBCTemplate;
+import event.CustomEventPublisher;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -54,10 +56,21 @@ public class MainApp {
         AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext();
         annotationConfigApplicationContext.register(HelloWorldConfig.class);
         annotationConfigApplicationContext.refresh();
-        Dog bean = annotationConfigApplicationContext.getBean(Dog.class);
+        annotationConfigApplicationContext.start();
+//        Dog bean = annotationConfigApplicationContext.getBean(Dog.class);
 
-        System.out.println(bean);
+//        System.out.println(bean);
+        CustomEventPublisher bean = annotationConfigApplicationContext.getBean(CustomEventPublisher.class);
+        bean.publish();
+        bean.publish();
 
+        StudentJDBCTemplate studentjdbctemplate = ((StudentJDBCTemplate) context.getBean("studentjdbctemplate"));
+        studentjdbctemplate.create("张三",90);
+        studentjdbctemplate.create("李斯",89);
+        System.out.println(studentjdbctemplate.listStudents());
+
+
+//        annotationConfigApplicationContext.stop();
 
     }
 
