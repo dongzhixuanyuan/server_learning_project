@@ -1,7 +1,10 @@
 package web
 
+import org.springframework.http.converter.json.GsonBuilderUtils
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RestController
 
 /**
  * @description 文件描述
@@ -17,4 +20,15 @@ class HelloWorldController {
         println("Hello World!")
         return "hello"
     }
+}
+
+@RestController
+@RequestMapping("/hello")
+class RestControllerDemo {
+
+    @RequestMapping("/get")
+    fun getHello():String{
+        return "server response"
+    }
+
 }
