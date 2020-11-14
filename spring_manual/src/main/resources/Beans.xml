@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd"
-       xmlns:p="http://www.springframework.org/schema/p"
->
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       xmlns:p="http://www.springframework.org/schema/p">
+
+
+    <context:annotation-config/>
+
 
     <bean id="beanTeamplate" abstract="true">
         <property name="message1" value="Hello World!"/>
@@ -85,7 +91,18 @@
 
     <bean id="address1" class="Address"/>
 
+    <bean id="talk" class="Talk"/>
 
+
+    <bean id="autowired" class="AutoWiredTest" autowire="constructor">
+        <property name="age" value="1"/>
+    </bean>
+
+    <bean id="dog" class="Dog"/>
+
+    <bean id="cat" class="Cat">
+        <constructor-arg  index="0" type="int" value="100"/>
+    </bean>
 
 
 </beans>

@@ -1,4 +1,5 @@
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
@@ -28,17 +29,34 @@ public class MainApp {
 //        obj.getMessage();
 //        context.getBean("goodBoy");
 
-        TextEditor editor = ((TextEditor) context.getBean("textEditor"));
-        editor.spellCheck();
-        Student student = ((Student) context.getBean("student"));
-        student.speak();
-        student.write();
-        JavaCollection collection = ((JavaCollection) context.getBean("javaCollection"));
-        System.out.println(collection.getAddressList());
-        System.out.println(collection.getAddressMap());
-        System.out.println(collection.getAddressProp());
-        System.out.println(collection.getAddressSet());
+//        TextEditor editor = ((TextEditor) context.getBean("textEditor"));
+//        editor.spellCheck();
+//        Student student = ((Student) context.getBean("student"));
+//        student.speak();
+//        student.write();
+//        JavaCollection collection = ((JavaCollection) context.getBean("javaCollection"));
+//        System.out.println(collection.getAddressList());
+//        System.out.println(collection.getAddressMap());
+//        System.out.println(collection.getAddressProp());
+//        System.out.println(collection.getAddressSet());
+//        context.registerShutdownHook();
+
+        AutoWiredTest autowired = ((AutoWiredTest) context.getBean("autowired"));
+        Dog dog = (Dog) context.getBean("dog");
+        dog.testTalk();
+        Cat cat = (Cat)context.getBean("cat");
+        System.out.println(cat.getAge());
+//        System.out.println(dog.getTalk());
+        System.out.println(autowired.getAge());
+
         context.registerShutdownHook();
+
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext();
+        annotationConfigApplicationContext.register(HelloWorldConfig.class);
+        annotationConfigApplicationContext.refresh();
+        Dog bean = annotationConfigApplicationContext.getBean(Dog.class);
+
+        System.out.println(bean);
 
 
     }
