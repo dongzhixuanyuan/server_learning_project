@@ -3,14 +3,20 @@ package db.jdbc
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import org.springframework.jdbc.core.JdbcTemplate
+import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import org.springframework.scheduling.support.SimpleTriggerContext
 import org.springframework.stereotype.Component
+import org.springframework.transaction.PlatformTransactionManager
+import org.springframework.transaction.annotation.EnableTransactionManagement
+import org.springframework.transaction.annotation.Transactional
+import sun.rmi.runtime.Log
 import java.sql.Connection
 import javax.annotation.PostConstruct
 import javax.sql.DataSource
@@ -34,6 +40,7 @@ open class JDBCAppConfig {
 
     @Value("\${jdbc.password}")
     var jdbcPassword: String? = null
+
     @Bean
     open fun createDataSource(): DataSource {
         val config = HikariConfig()
@@ -47,15 +54,23 @@ open class JDBCAppConfig {
     }
 
     @Bean
-    open fun createJdbcTemplate(@Autowired dataSource: DataSource?): JdbcTemplate {
+    @Qualifier("jdbc")
+    open fun createJdbcTemplate(@Autowired dataSource: DataSource): JdbcTemplate {
         return JdbcTemplate(dataSource)
     }
+
+    @Bean
+    open fun createTxManager(@Autowired dataSource: DataSource): PlatformTransactionManager {
+        return DataSourceTransactionManager(dataSource)
+    }
+
 }
 
 @Component
 class DatabaseInitializer() {
-    @Autowired
+    @Autowired()
     var jdbcTemplate: JdbcTemplate? = null
+
     @PostConstruct
     fun init() {
         jdbcTemplate!!.update(
@@ -67,23 +82,23 @@ class DatabaseInitializer() {
                     + "UNIQUE (email))"
         )
 
-//        jdbcTemplate!!.update("insert into users (id,email,password,name) values (100,'37883@qq.com','3783','Jim')")
+//        jdbcTemplate!!.update("insert into users (id,email,password,name) values (239,'37883@qq.com','3783','Jim')")
     }
 }
 
-data class User(val id:Long, val email:String, val password:String, val name:String)
+data class User(val id: Long, val email: String, val password: String, val name: String)
 
 @Component
- class UserService {
+open class UserService {
     @Autowired
-    lateinit var jdbcTemplate:JdbcTemplate
+    var jdbcTemplate: JdbcTemplate? = null
 
     fun getUserById(id: Long): User? {
         // 注意传入的是ConnectionCallback:
-        return jdbcTemplate.execute { conn: Connection ->
+        return jdbcTemplate!!.execute { conn: Connection ->
             conn.prepareStatement("SELECT * FROM users WHERE id = ?").let { ps ->
                 ps.setObject(1, id)
-                ps.executeQuery().let {rs->
+                ps.executeQuery().let { rs ->
                     if (rs.next()) {
                         return@execute User( // new User object:
                             rs.getLong("id"),  // id
@@ -97,5 +112,13 @@ data class User(val id:Long, val email:String, val password:String, val name:Str
 
             }
         }
+    }
+
+
+    @Transactional()
+    open fun register(id: Long, email: String, name: String, password: String): Boolean {
+        val updateResult =
+            jdbcTemplate!!.update("insert into users (id,email,password,name) values ($id,'$email','$password','$name')")
+        return updateResult > 0
     }
 }

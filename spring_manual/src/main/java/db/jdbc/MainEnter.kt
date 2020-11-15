@@ -16,4 +16,6 @@ fun main(args: Array<String>) {
     user?.run {
         println(user.toString())
     }
+//    val register = bean.register(90, "7fafaj@ffaf", "fjaisjfa", "fjaisjfao")
+//    println(register)
 }
