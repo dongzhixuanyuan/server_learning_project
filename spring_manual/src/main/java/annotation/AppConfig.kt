@@ -2,7 +2,6 @@ package annotation
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Condition
 import org.springframework.context.annotation.ConditionContext
 import org.springframework.context.annotation.Conditional
@@ -68,7 +67,7 @@ class SmtpConfig(val host: String = "localhost", val port: Int = 8080)
 class LaunchAction {
 
     @PostConstruct
-    fun initMethod(){
+    fun initMethod() {
         println("LaunchAction Init")
     }
 }
@@ -80,6 +79,7 @@ class LaunchCondition : Condition {
     }
 
 }
+
 
 
 

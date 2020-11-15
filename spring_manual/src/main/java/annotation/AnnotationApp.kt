@@ -29,7 +29,8 @@ open class AnnotationApp {
             val zoneId = context.getBean(ZoneId::class.java)
             println(zoneId.id)
             val launchAction = context.getBean(LaunchAction::class.java)
-
+//            val uploader = context.getBean(FileUploader::class.java)
+//            println(uploader)
         }
     }
 }
