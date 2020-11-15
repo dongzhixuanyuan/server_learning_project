@@ -91,16 +91,16 @@
 
     <bean id="address1" class="Address"/>
 
-    <bean id="talk" class="Talk"/>
+    <bean id="talk" class="annotation.Talk"/>
 
 
-    <bean id="autowired" class="AutoWiredTest" autowire="constructor">
+    <bean id="autowired" class="annotation.AutoWiredTest" autowire="constructor">
         <property name="age" value="1"/>
     </bean>
 
-    <bean id="dog" class="Dog"/>
+    <bean id="dog" class="annotation.Dog"/>
 
-    <bean id="cat" class="Cat">
+    <bean id="cat" class="annotation.Cat">
         <constructor-arg  index="0" type="int" value="100"/>
     </bean>
 

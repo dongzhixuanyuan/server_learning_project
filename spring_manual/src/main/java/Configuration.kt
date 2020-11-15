@@ -1,10 +1,15 @@
+import annotation.Dog
+import annotation.Talk
 import event.CStartEventHandler
 import event.CStopEventHandler
-import event.CustomEvent
 import event.CustomEventHandler
 import event.CustomEventPublisher
+import org.springframework.beans.factory.FactoryBean
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
 
 /**
  * @description 文件描述
@@ -19,12 +24,19 @@ import org.springframework.context.annotation.Configuration
 open class HelloWorldConfig {
 
     @Bean(initMethod = "initTest")
-    open fun dog():Dog{
+    open fun dog(): Dog {
         return Dog()
     }
 
     @Bean
-    open fun talk():Talk {
+    @Qualifier("bigDog")
+    open fun bigDog():Dog{
+        return Dog()
+    }
+
+
+    @Bean
+    open fun talk(): Talk {
         return Talk()
     }
 
@@ -48,5 +60,17 @@ open class HelloWorldConfig {
         return CustomEventHandler()
     }
 
-
 }
+
+@Configuration
+@Component
+open class ZoneIDFactoryBean:FactoryBean<ZoneID>{
+    override fun getObject(): ZoneID? {
+        return ZoneID()
+    }
+
+    override fun getObjectType(): Class<*>? {
+       return ZoneID::class.java
+    }
+}
+class ZoneID {}
