@@ -28,12 +28,16 @@ public class DataBaseBean {
     @Value("${jdbc.password}")
     String password;
 
+    @Value("${jdbc.driverclassname}")
+    String driverClassName;
+
     @Bean("hibernate")
     public DataSource createDatasource() {
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl(jdbcUrl);
         hikariConfig.setUsername(userName);
         hikariConfig.setPassword(password);
+        hikariConfig.setDriverClassName(driverClassName);
         hikariConfig.addDataSourceProperty("autoCommit", "true");
         hikariConfig.addDataSourceProperty("connectionTimeout", "5");
         hikariConfig.addDataSourceProperty("idleTimeout", "60");
