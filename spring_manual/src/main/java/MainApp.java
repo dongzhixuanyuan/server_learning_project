@@ -65,7 +65,7 @@ public class MainApp {
         annotationConfigApplicationContext.getBean("bigDog");
         ZoneID bean1 = annotationConfigApplicationContext.getBean(ZoneID.class);
         System.out.println(bean1.toString());
-//        System.out.println(bean);
+//        Sxystem.out.println(bean);
         CustomEventPublisher bean = annotationConfigApplicationContext.getBean(CustomEventPublisher.class);
         bean.publish();
         bean.publish();
