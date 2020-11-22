@@ -1,16 +1,23 @@
 package webmvc;
 
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.spring.servlet.PebbleViewResolver;
+import org.apache.activemq.artemis.jms.client.ActiveMQJMSConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.LocaleResolver;
@@ -22,6 +29,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import webmvc.websocket.ChatHandler;
 import webmvc.websocket.ChatHandshakeInterceptor;
 
+import javax.jms.ConnectionFactory;
 import javax.servlet.ServletContext;
 import java.util.Arrays;
 import java.util.Locale;
@@ -32,7 +40,8 @@ import java.util.function.Consumer;
 @ComponentScan
 @EnableWebMvc
 @EnableTransactionManagement
-@PropertySource("classpath:spring_mvc_jdbc.properties")
+@EnableJms
+@PropertySource({"classpath:spring_mvc_jdbc.properties","classpath:jms.properties"})
 public class Appconfig {
 
     @Bean
@@ -100,5 +109,33 @@ public class Appconfig {
                 registry.addHandler(chatHandler,"/chat").addInterceptors(interceptor);
             }
         };
+    }
+
+    @Bean
+    ConnectionFactory createJMSConnectionFactory(
+            @Value("${jms.uri:tcp://localhost:61616}") String uri,
+            @Value("${jms.username:admin}") String username,
+            @Value("${jms.password:123456}") String password)
+    {
+        return new ActiveMQJMSConnectionFactory(uri, username, password);
+    }
+
+    @Bean
+    JmsTemplate createJmsTemplate(@Autowired ConnectionFactory connectionFactory) {
+        return new JmsTemplate(connectionFactory);
+    }
+
+    @Bean
+    ObjectMapper createObjectMapper() {
+        ObjectMapper om = new ObjectMapper();
+        om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        return om;
+    }
+
+    @Bean("jmsListenerContainerFactory")
+    DefaultJmsListenerContainerFactory createJmsListenerContainerFactory(@Autowired ConnectionFactory connectionFactory) {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        return factory;
     }
 }
