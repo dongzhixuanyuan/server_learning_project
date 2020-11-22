@@ -3,7 +3,7 @@ package db.hibernate;
 import javax.persistence.*;
 
 /**
- * @author liudong (liudong@rd.netease.com)
+ * @author liudong (735106520@qq.com)
  * @description 文件描述
  * @date 2020/11/20 10:18 下午
  */
