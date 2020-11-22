@@ -2,7 +2,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * @author liudong (liudong@rd.netease.com)
+ * @author liudong (735106520@qq.com)
  * @description 文件描述
  * @date 2020/11/8 4:26 下午
  */
