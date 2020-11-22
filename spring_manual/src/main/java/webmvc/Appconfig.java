@@ -5,17 +5,23 @@ import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.spring.servlet.PebbleViewResolver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import javax.servlet.ServletContext;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.function.Consumer;
 
 @Configuration
@@ -64,4 +70,21 @@ public class Appconfig {
         viewResolver.setPebbleEngine(engine);
         return viewResolver;
     }
+
+    @Bean
+    LocaleResolver createLocalResolver(){
+        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+        cookieLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+        cookieLocaleResolver.setDefaultTimeZone(TimeZone.getDefault());
+        return cookieLocaleResolver;
+    }
+
+    @Bean("i18n")
+    MessageSource createMsgSrc(){
+        ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();
+        resourceBundleMessageSource.setDefaultEncoding("UTF-8");
+        resourceBundleMessageSource.setBasename("string");
+        return resourceBundleMessageSource;
+    }
+
 }

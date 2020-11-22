@@ -27,6 +27,13 @@ public class UserController {
         return mUserService.findUser(name);
     }
 
+    @RequestMapping("/sign")
+    public ModelAndView signIn(){
+        return new ModelAndView("signin.jsp");
+    }
+
+
+
     @ExceptionHandler(RuntimeException.class)
     public ModelAndView handleUnknownException(Exception ex){
         HashMap<String, Object> map = new HashMap<>();
@@ -34,5 +41,8 @@ public class UserController {
         map.put("message",ex.getMessage());
         return new ModelAndView("500.html", map);
     }
+
+
+
 
 }
