@@ -42,6 +42,11 @@ public class UserController {
         return new ModelAndView("500.html", map);
     }
 
+    @RequestMapping("/signin")
+    public ModelAndView handleChat(){
+        return new ModelAndView("chat.jsp");
+    }
+
 
 
 

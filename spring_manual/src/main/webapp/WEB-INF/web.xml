@@ -18,7 +18,7 @@
 
     <servlet-mapping>
         <servlet-name>springmvc-app</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
     
     <filter>

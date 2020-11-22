@@ -17,6 +17,10 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import webmvc.websocket.ChatHandler;
+import webmvc.websocket.ChatHandshakeInterceptor;
 
 import javax.servlet.ServletContext;
 import java.util.Arrays;
@@ -87,4 +91,14 @@ public class Appconfig {
         return resourceBundleMessageSource;
     }
 
+
+    @Bean
+    WebSocketConfigurer createWebsocketConfigurer(@Autowired ChatHandler chatHandler, @Autowired ChatHandshakeInterceptor interceptor){
+        return new WebSocketConfigurer() {
+            @Override
+            public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+                registry.addHandler(chatHandler,"/chat").addInterceptors(interceptor);
+            }
+        };
+    }
 }
