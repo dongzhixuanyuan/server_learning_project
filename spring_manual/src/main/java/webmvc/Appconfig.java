@@ -12,10 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import javax.servlet.ServletContext;
 import java.util.Arrays;
@@ -44,6 +41,12 @@ public class Appconfig {
                     registry.addInterceptor(handlerInterceptor);
                 }
             });
+            }
+
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/").allowedOrigins("http://localhost:8080")
+                        .allowedMethods("GET","POST").maxAge(360);
             }
         };
     }
