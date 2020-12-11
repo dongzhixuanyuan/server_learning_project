@@ -1,5 +1,7 @@
 package com.magina.antiswindle.user
 
+import com.magina.antiswindle.user.mapper.UserMapper
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 /**
@@ -12,6 +14,11 @@ import org.springframework.stereotype.Component
 @Component
 class UserService {
 
+    @Autowired
+    var userMapper:UserMapper? = null
 
+    fun registerUser(user: User) {
+        userMapper!!.register(user)
+    }
 
 }

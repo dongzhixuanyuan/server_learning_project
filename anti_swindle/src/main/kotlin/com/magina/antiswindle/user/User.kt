@@ -7,7 +7,7 @@ package com.magina.antiswindle.user
  * @date 2020/12/7 5:07 下午
  */
 class User(
-    var id: Int,
+    var id: Int?,
     var name: String,
     var avatar_url: String,
     var phone: String,
