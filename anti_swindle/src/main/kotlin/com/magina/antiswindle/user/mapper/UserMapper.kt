@@ -12,4 +12,6 @@ import org.apache.ibatis.annotations.Mapper
 @Mapper
 interface UserMapper {
     fun register(bean:User):Long
+
+    fun test()
 }

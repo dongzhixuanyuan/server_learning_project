@@ -18,7 +18,8 @@ class UserService {
     var userMapper:UserMapper? = null
 
     fun registerUser(user: User) {
-        userMapper!!.register(user)
+//        userMapper!!.register(user)
+        userMapper!!.test()
     }
 
 }

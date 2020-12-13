@@ -35,6 +35,15 @@ dependencies {
 
 }
 
+sourceSets {
+    main {
+        resources {
+            //可以将java目录下的所有非.java资源打包到classes下
+            srcDirs("src/main/java","src/main/kotlin", "src/main/resources")
+        }
+    }
+}
+
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
