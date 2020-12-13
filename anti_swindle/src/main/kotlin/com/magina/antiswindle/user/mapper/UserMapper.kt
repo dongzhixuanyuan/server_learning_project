@@ -11,7 +11,12 @@ import org.apache.ibatis.annotations.Mapper
  */
 @Mapper
 interface UserMapper {
-    fun register(bean:User):Long
+    fun register(bean: User): Long
 
-    fun test()
+    fun queryByPhone(phone: String): User?
+    fun queryById(id: Int): User?
+
+    fun update(bean: User): Long
+
+    fun delete(id:Int):Long
 }

@@ -17,9 +17,27 @@ class UserService {
     @Autowired
     var userMapper:UserMapper? = null
 
-    fun registerUser(user: User) {
-//        userMapper!!.register(user)
-        userMapper!!.test()
+    fun registerUser(user: User):Long {
+      return userMapper!!.register(user)
     }
+
+    fun queryByPhone(phone:String):User?{
+        return userMapper!!.queryByPhone(phone)
+    }
+
+    fun queryById(id:Int):User?{
+        return userMapper!!.queryById(id)
+    }
+
+    fun update(user: User):Long{
+        return userMapper!!.update(user)
+    }
+
+    fun deleteById(id: Int):Long {
+        return userMapper!!.delete(id)
+    }
+
+
+
 
 }

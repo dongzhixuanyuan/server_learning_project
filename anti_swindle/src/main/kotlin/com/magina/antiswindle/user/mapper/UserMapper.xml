@@ -6,7 +6,20 @@
     <insert id="register" parameterType="com.magina.antiswindle.user.User" useGeneratedKeys="true" keyProperty="id">
         insert into user set name=#{name},avatar_url=#{avatar_url},phone=#{phone},password=#{password},created_at=#{created_at},updated_at=#{updated_at}
     </insert>
-    <select id="test" resultType="com.magina.antiswindle.user.User">
-        select * from user
+    <select id="queryByPhone" parameterType="String" resultType="com.magina.antiswindle.user.User">
+        select * from user where phone=#{phone}
     </select>
+
+    <select id="queryById" parameterType="int" resultType="com.magina.antiswindle.user.User">
+        select * from user where id=#{id}
+    </select>
+
+    <update id="update" parameterType="com.magina.antiswindle.user.User">
+        update user  set name=#{name},avatar_url=#{avatar_url},phone=#{phone},password = #{password},created_at = #{created_at},updated_at=#{updated_at} where id=#{id}
+    </update>
+
+
+    <delete id="delete" parameterType="int">
+        delete from user where id = #{id}
+    </delete>
 </mapper>

@@ -9,11 +9,11 @@ package com.magina.antiswindle.user
 class User(
     var id: Int?,
     var name: String,
-    var avatar_url: String,
+    var avatar_url: String?,
     var phone: String,
     var password: String,
-    var created_at: Long,
-    var updated_at: Long
+    var created_at: String?,
+    var updated_at: String?
 )
 
 class UserOauths(
