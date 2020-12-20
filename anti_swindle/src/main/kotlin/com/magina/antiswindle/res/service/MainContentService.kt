@@ -27,6 +27,20 @@ class MainContentService {
         return resItemMapper!!.addRes(res)
     }
 
+
+    fun deleteRes(id: Int): Int{
+        return resItemMapper!!.deleteRes(id)
+    }
+
+    fun updateRes(newRes: ItemResource): Int{
+        return resItemMapper!!.updateRes(newRes)
+    }
+
+    fun queryRes(id: Int): ItemResource {
+        return resItemMapper!!.queryRes(id)
+    }
+
+
     fun getVideo(videoUrl: String): Resource? {
         val absolutePath = Env.BASE_DIR  + videoUrl
         val videofile = File(absolutePath)

@@ -9,4 +9,32 @@
         insert into anti_swindle set source_account=#{source_account},timestamp=#{data.timestamp},source=#{data.source},title=#{data.title},detail_content=#{data.detail_content},comment=#{data.comment},video=#{data.video},image=#{data.image}
     </insert>
 
+    <delete id="deleteRes" parameterType="int">
+        delete from anti_swindle where id=#{id}
+    </delete>
+
+    <update id="updateRes" parameterType="com.magina.antiswindle.res.model.ItemResource">
+        update anti_swindle set source_account=#{source_account},timestamp=#{data.timestamp},source=#{data.source},title=#{data.title},detail_content=#{data.detail_content},comment=#{data.comment},video=#{data.video},image=#{data.image}
+        where id=#{id}
+    </update>
+
+    <resultMap id="resItem" type="com.magina.antiswindle.res.model.ItemResource">
+        <id column="id" property="id"/>
+        <result column="source_account" property="source_account"/>
+        <association property="data" javaType="com.magina.antiswindle.res.model.Data">
+            <result column="timestamp" property="timestamp"/>
+            <result column="source" property="source"/>
+            <result column="title" property="title"/>
+            <result column="detail_content" property="detail_content"/>
+            <result column="comment" property="comment"/>
+            <result column="video" property="video"/>
+            <result column="image" property="image"/>
+        </association>
+    </resultMap>
+
+
+    <select id="queryRes" parameterType="int" resultMap="resItem">
+        select * from anti_swindle where id=${id};
+    </select>
+
 </mapper>

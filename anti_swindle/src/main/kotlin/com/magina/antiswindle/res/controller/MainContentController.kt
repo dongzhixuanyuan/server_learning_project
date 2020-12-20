@@ -64,7 +64,7 @@ class MainContentController {
     }
 
     @RequestMapping("/video/upload")
-    fun uploadVideo(@RequestParam() myfile: MultipartFile): ResponseBean<Void> {
+    fun uploadVideo(@RequestParam("myfile") myfile: MultipartFile): ResponseBean<Void> {
         var originalFilename = myfile.originalFilename
         val name = myfile.name
         val size = myfile.size
@@ -73,16 +73,11 @@ class MainContentController {
             extensionName = originalFilename.substring(originalFilename.lastIndexOf("."))
         }
         var newFileName = UUID.randomUUID().toString()
-
         val outputFile = File(Env.BASE_DIR + newFileName +  extensionName)
-
         if (!outputFile.exists()) {
             outputFile.createNewFile()
         }
-
-
         FileCopyUtils.copy(myfile.inputStream,FileOutputStream(outputFile))
-
         return ResponseBean.successWithNoData()
 
     }
