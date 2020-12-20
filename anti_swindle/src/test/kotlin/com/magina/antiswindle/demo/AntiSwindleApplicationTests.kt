@@ -36,4 +36,10 @@ class AntiSwindleApplicationTests {
 
     }
 
+    @Test
+    fun testVideoGet(){
+        val video = mainContentService!!.getVideo("8f7N5lt1lx07IGXucdKo01041200AOiX0E010.mp4")
+        println(video.toString())
+    }
+
 }

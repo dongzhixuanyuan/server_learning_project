@@ -1,12 +1,27 @@
 package com.magina.antiswindle.res.model.controller
 
-import com.magina.antiswindle.common.ResonseBean
+import com.magina.antiswindle.common.ResponseBean
+import com.magina.antiswindle.const.Env
 import com.magina.antiswindle.res.model.ItemResource
 import com.magina.antiswindle.res.model.service.MainContentService
+import org.apache.tomcat.util.http.fileupload.FileUtils
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties
+import org.springframework.core.io.InputStreamResource
+import org.springframework.core.io.Resource
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
+import org.springframework.util.FileCopyUtils
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
+import java.io.File
+import java.io.FileOutputStream
+import java.util.*
+import kotlin.system.exitProcess
 
 /**
  * @description 文件描述
@@ -19,16 +34,57 @@ import org.springframework.web.bind.annotation.RestController
 class MainContentController {
 
     @Autowired
-    var resItemService:MainContentService? = null
+    var resItemService: MainContentService? = null
 
     @RequestMapping("/add")
-    fun addRes(@RequestBody res: ItemResource):ResonseBean<Void> {
+    fun addRes(@RequestBody res: ItemResource): ResponseBean<Void> {
         val result = resItemService!!.addRes(res)
         if (result > 0) {
-            return ResonseBean.successWithNoData()
+            return ResponseBean.successWithNoData()
         }
-        return ResonseBean.
-                fail(500,"server error")
+        return ResponseBean.fail(500, "server error")
+    }
+
+    @RequestMapping("/video/download")
+    fun downloadVideo(@RequestParam("video") videoUrl: String): ResponseEntity<Resource>? {
+        val videoFile = resItemService!!.getVideo(videoUrl)
+
+        val headers =  HttpHeaders();
+        headers.add ( "Content-Disposition",String.format("attachment;filename=\"%s",videoUrl));
+        headers.add ( "Cache-Control","no-cache,no-store,must-revalidate" );
+        headers.add ( "Pragma","no-cache" );
+        headers.add ( "Expires","0" );
+
+        if (videoFile != null) {
+            return ResponseEntity.ok().headers(headers).contentLength(videoFile.contentLength())
+                .contentType(MediaType.parseMediaType("video/mp4")).body(videoFile)
+        }
+//
+        return null
+    }
+
+    @RequestMapping("/video/upload")
+    fun uploadVideo(@RequestParam() myfile: MultipartFile): ResponseBean<Void> {
+        var originalFilename = myfile.originalFilename
+        val name = myfile.name
+        val size = myfile.size
+        var extensionName = ""
+        if (!originalFilename.isNullOrEmpty()) {
+            extensionName = originalFilename.substring(originalFilename.lastIndexOf("."))
+        }
+        var newFileName = UUID.randomUUID().toString()
+
+        val outputFile = File(Env.BASE_DIR + newFileName +  extensionName)
+
+        if (!outputFile.exists()) {
+            outputFile.createNewFile()
+        }
+
+
+        FileCopyUtils.copy(myfile.inputStream,FileOutputStream(outputFile))
+
+        return ResponseBean.successWithNoData()
+
     }
 
 

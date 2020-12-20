@@ -19,7 +19,7 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
     }
 
     override fun configure(http: HttpSecurity) {
-        http.authorizeRequests().anyRequest().permitAll()
+        http.csrf().disable().authorizeRequests().anyRequest().permitAll()
     }
 
     override fun configure(web: WebSecurity?) {

@@ -1,4 +1,4 @@
-CREATE DATABASE `antiswindle` DEFAULT CHARACTER SET utf8;
+CREATE DATABASE IF NOT EXISTS `antiswindle` DEFAULT CHARACTER SET utf8;
 
 USE `antiswindle`;
 
