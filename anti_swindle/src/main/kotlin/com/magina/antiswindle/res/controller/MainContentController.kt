@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.util.FileCopyUtils
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
@@ -36,7 +37,7 @@ class MainContentController {
     @Autowired
     var resItemService: MainContentService? = null
 
-    @RequestMapping("/add")
+    @RequestMapping("/add", method = arrayOf(RequestMethod.POST))
     fun addRes(@RequestBody res: ItemResource): ResponseBean<Void> {
         val result = resItemService!!.addRes(res)
         if (result > 0) {
@@ -45,15 +46,48 @@ class MainContentController {
         return ResponseBean.fail(500, "server error")
     }
 
+    @RequestMapping("/delete")
+    fun deleteRes(id: Int): ResponseBean<Void> {
+
+        try {
+            resItemService!!.deleteRes(id)
+            return ResponseBean.successWithNoData()
+        } catch (e: Exception) {
+            return ResponseBean.fail(500, "删除失败:${e.message}")
+        }
+    }
+
+    @RequestMapping("/update")
+    fun updateRes(@RequestBody newRes: ItemResource): ResponseBean<Void> {
+        try {
+            val result = resItemService!!.updateRes(newRes)
+            return ResponseBean.successWithNoData()
+        } catch (e: Exception) {
+            return ResponseBean.fail(500, "更新失败:${e.message}")
+        }
+
+    }
+
+    @RequestMapping("/query")
+    fun queryRes(id: Int): ResponseBean<ItemResource?> {
+        try {
+            val result = resItemService!!.queryRes(id)
+            return ResponseBean(200, "success", result)
+        } catch (e: Exception) {
+            return ResponseBean(500, "query fail:${e.message}", null)
+        }
+    }
+
+
     @RequestMapping("/video/download")
     fun downloadVideo(@RequestParam("video") videoUrl: String): ResponseEntity<Resource>? {
         val videoFile = resItemService!!.getVideo(videoUrl)
 
-        val headers =  HttpHeaders();
-        headers.add ( "Content-Disposition",String.format("attachment;filename=\"%s",videoUrl));
-        headers.add ( "Cache-Control","no-cache,no-store,must-revalidate" );
-        headers.add ( "Pragma","no-cache" );
-        headers.add ( "Expires","0" );
+        val headers = HttpHeaders();
+        headers.add("Content-Disposition", String.format("attachment;filename=\"%s", videoUrl));
+        headers.add("Cache-Control", "no-cache,no-store,must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
 
         if (videoFile != null) {
             return ResponseEntity.ok().headers(headers).contentLength(videoFile.contentLength())
@@ -73,11 +107,11 @@ class MainContentController {
             extensionName = originalFilename.substring(originalFilename.lastIndexOf("."))
         }
         var newFileName = UUID.randomUUID().toString()
-        val outputFile = File(Env.BASE_DIR + newFileName +  extensionName)
+        val outputFile = File(Env.BASE_DIR + newFileName + extensionName)
         if (!outputFile.exists()) {
             outputFile.createNewFile()
         }
-        FileCopyUtils.copy(myfile.inputStream,FileOutputStream(outputFile))
+        FileCopyUtils.copy(myfile.inputStream, FileOutputStream(outputFile))
         return ResponseBean.successWithNoData()
 
     }

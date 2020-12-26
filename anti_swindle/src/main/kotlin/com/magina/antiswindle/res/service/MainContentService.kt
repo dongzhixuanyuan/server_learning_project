@@ -36,7 +36,7 @@ class MainContentService {
         return resItemMapper!!.updateRes(newRes)
     }
 
-    fun queryRes(id: Int): ItemResource {
+    fun queryRes(id: Int): ItemResource? {
         return resItemMapper!!.queryRes(id)
     }
 
