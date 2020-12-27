@@ -31,7 +31,7 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3")
     implementation("com.google.code.gson:gson:2.8.6")
-
+//    implementation("org.springframework.boot:spring-boot-starter-log4j:1.3.8.RELEASE")
 
 }
 
