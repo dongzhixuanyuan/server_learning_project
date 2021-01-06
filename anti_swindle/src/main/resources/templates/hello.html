@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" type="text/css" media="all" href="../static/css/style.css" th:href="@{/static/css/style.css}">
+<script type="text/javascript" src="thymeleaf.js" th:src="@{/static/templates/thymeleaf.js}"></script>
+
+
+<div th:replace="include::footer1"></div>
+<div th:replace="include::footer2(2015,2018)"></div>
+
+<head>
+    <meta charset="UTF-8">
+    <title>thymeleaf test</title>
+
+</head>
+<body>
+
+<div class="showing">
+    <h2>带状态遍历</h2>
+    <table>
+        <thead>
+         <tr>
+             <th>index</th>
+             <th>id</th>
+             <th>姓名</th>
+         </tr>
+        </thead>
+        <tbody>
+            <tr th:class="${status.even}?'even':'odd'" th:each="s,status:${students}">
+                <td th:text="${status.index}"></td>
+                <td th:text="${s.id}"></td>
+                <td th:text="${s.name}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="showing">
+    <h2>遍历 select</h2>
+    <select size="5">
+        <option th:each="s:${students}" th:value="${s.id}" th:selected="${s.id == selectedstudent.id}"
+                th:text="${s.name}"></option>
+    </select>
+</div>
+
+<div class="showing">
+    <h2>遍历 radio</h2>
+    <input name="student" type="radio" th:each="s:${students}" th:value="${s.id}" th:checked="${s.id == selectedstudent.id}" th:text="${s.name}">
+</div>
+
+
+</body>
+</html>
