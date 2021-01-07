@@ -47,6 +47,41 @@
     <input name="student" type="radio" th:each="s:${students}" th:value="${s.id}" th:checked="${s.id == selectedstudent.id}" th:text="${s.name}">
 </div>
 
+<div class="showing">
+    <h2>格式化日期</h2>
+    直接输出日期：${now}:
+    <p th:text="${now}"></p>
+    默认格式化${#dates.format(now)}:
+    <p th:text="${#dates.format(now)}"></p>
+    自定义格式化 ${#dates.format(now,'yyyy-MM-dd HH:mm:ss')}:
+    <p th:text="${#dates.format(now,'yyyy-MM-dd HH:mm:ss')}"></p>
+
+</div>
+
+<div class="showing">
+    <h2>打印thymeleaf自定义的一些工具类信息</h2>
+    <p th:text="${#execInfo.templateName}"></p>
+    <p th:text="${#execInfo.templateMode}"></p>
+    <p th:text="${#execInfo.processedTemplateName}"></p>
+    <p th:text="${#execInfo.processedTemplateMode}"></p>
+    <p th:text="${#execInfo.templateNames}"></p>
+    <p th:text="${#execInfo.templateModes}"></p>
+    <p th:text="${#execInfo.templateStack}"></p>
+</div>
+
+
+<div style="width: 500px;margin: 20px auto;text-align: center">
+    <table align="center" border="1" cellspacing="0">
+        <tr>
+            <td>id</td>
+            <td>name</td>
+            <td>编辑</td>
+            <td>删除</td>
+        </tr>
+    </table>
+</div>
+
+
 
 </body>
 </html>

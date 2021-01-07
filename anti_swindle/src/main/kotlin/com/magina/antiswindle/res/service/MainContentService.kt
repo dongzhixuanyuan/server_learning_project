@@ -23,6 +23,11 @@ class MainContentService {
     @Autowired
     var resItemMapper: ResItemMapper? = null
 
+
+    fun showAll():List<ItemResource> {
+       return resItemMapper!!.allRes()
+    }
+
     fun addRes(res: ItemResource): Int {
         return resItemMapper!!.addRes(res)
     }

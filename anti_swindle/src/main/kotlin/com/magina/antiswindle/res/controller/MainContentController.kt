@@ -12,11 +12,14 @@ import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.util.FileCopyUtils
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
@@ -30,13 +33,22 @@ import kotlin.system.exitProcess
  * @author magina (735106520@qq.com)
  * @date 2020/12/13 5:50 下午
  */
-@RestController
+@Controller
 @RequestMapping("/res")
 class MainContentController {
 
     @Autowired
     var resItemService: MainContentService? = null
 
+    @RequestMapping("/all")
+    fun allRes(model:Model):String {
+        val allItem = resItemService!!.showAll()
+        model.addAttribute("itemResults",allItem)
+        return "listResItem"
+    }
+
+
+    @ResponseBody
     @RequestMapping("/add", method = arrayOf(RequestMethod.POST))
     fun addRes(@RequestBody res: ItemResource): ResponseBean<Void> {
         val result = resItemService!!.addRes(res)
@@ -47,16 +59,17 @@ class MainContentController {
     }
 
     @RequestMapping("/delete")
-    fun deleteRes(id: Int): ResponseBean<Void> {
-
+    fun deleteRes(id: Int): String {
         try {
             resItemService!!.deleteRes(id)
-            return ResponseBean.successWithNoData()
         } catch (e: Exception) {
-            return ResponseBean.fail(500, "删除失败:${e.message}")
+
+        } finally {
+            return "redirect:/res/all"
         }
     }
 
+    @ResponseBody
     @RequestMapping("/update")
     fun updateRes(@RequestBody newRes: ItemResource): ResponseBean<Void> {
         try {
@@ -68,6 +81,7 @@ class MainContentController {
 
     }
 
+    @ResponseBody
     @RequestMapping("/query")
     fun queryRes(id: Int): ResponseBean<ItemResource?> {
         try {
@@ -78,7 +92,7 @@ class MainContentController {
         }
     }
 
-
+    @ResponseBody
     @RequestMapping("/video/download")
     fun downloadVideo(@RequestParam("video") videoUrl: String): ResponseEntity<Resource>? {
         val videoFile = resItemService!!.getVideo(videoUrl)
@@ -93,10 +107,10 @@ class MainContentController {
             return ResponseEntity.ok().headers(headers).contentLength(videoFile.contentLength())
                 .contentType(MediaType.parseMediaType("video/mp4")).body(videoFile)
         }
-//
         return null
     }
 
+    @ResponseBody
     @RequestMapping("/video/upload")
     fun uploadVideo(@RequestParam("myfile") myfile: MultipartFile): ResponseBean<Void> {
         var originalFilename = myfile.originalFilename

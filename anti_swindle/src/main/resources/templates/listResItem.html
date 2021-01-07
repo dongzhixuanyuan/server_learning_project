@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>内容页</title>
+</head>
+
+<body>
+<h2>存在的资源</h2>
+
+<div style="width: 500px;margin: 20px auto;text-align: center">
+    <table align="center" border="1" cellspacing="0">
+        <tr>
+            <td>id</td>
+            <td>name</td>
+            <td>des</td>
+            <td>图片/视频</td>
+            <td>编辑</td>
+            <td>删除</td>
+        </tr>
+
+        <tr th:each="r:${itemResults}">
+            <td th:text="${r.id}"></td>
+            <td th:text="${r.data.title}"></td>
+            <td th:text="${r.data.image}"></td>
+            <td>编辑</td>
+            <td><a th:href="@{/res/delete(id=${r.id})}"> 删除 </a></td>
+        </tr>
+
+    </table>
+</div>
+
+
+</body>
+</html>

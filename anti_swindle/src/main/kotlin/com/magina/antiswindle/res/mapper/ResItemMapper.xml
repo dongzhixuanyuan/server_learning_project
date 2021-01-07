@@ -4,6 +4,10 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.magina.antiswindle.res.mapper.ResItemMapper">
 
+    <select id="allRes" resultMap="resItem">
+        select * from anti_swindle
+    </select>
+
     <insert id="addRes" parameterType="com.magina.antiswindle.res.model.ItemResource" useGeneratedKeys="true"
             keyProperty="id">
         insert into anti_swindle set source_account=#{source_account},timestamp=#{data.timestamp},source=#{data.source},title=#{data.title},detail_content=#{data.detail_content},comment=#{data.comment},video=#{data.video},image=#{data.image}

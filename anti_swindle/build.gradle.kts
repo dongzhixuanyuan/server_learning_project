@@ -33,7 +33,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
 //    implementation("org.springframework.boot:spring-boot-starter-log4j:1.3.8.RELEASE")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-
+    implementation("com.github.pagehelper:pagehelper:4.1.6")
 }
 
 sourceSets {

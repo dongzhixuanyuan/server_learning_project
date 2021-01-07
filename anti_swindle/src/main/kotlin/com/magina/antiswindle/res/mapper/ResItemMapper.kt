@@ -12,6 +12,9 @@ import org.apache.ibatis.annotations.Mapper
  */
 @Mapper
 interface ResItemMapper {
+
+    fun allRes():List<ItemResource>
+
     fun addRes(res: ItemResource): Int
 
     fun deleteRes(id: Int): Int

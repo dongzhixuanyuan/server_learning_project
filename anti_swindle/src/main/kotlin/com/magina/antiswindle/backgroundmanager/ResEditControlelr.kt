@@ -29,6 +29,7 @@ class ResEditControlelr {
 
         model.addAttribute("students", students)
         model.addAttribute("selectedstudent",student)
+        model.addAttribute("now",Calendar.getInstance().time)
         return "hello"
     }
 }
