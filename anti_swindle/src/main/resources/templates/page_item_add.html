@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<script language="JavaScript"></script>
+<script type="text/javascript" language="JavaScript">
+    function submitClick() {
+        var nameValue = document.getElementById("name").value;
+        var sourceValue = document.getElementById("source").value;
+        alert(nameValue + sourceValue)
+
+    }
+
+
+</script>
+<head>
+    <title>单个Item的编辑页面</title>
+</head>
+<body>
+<form action="/res/add" method="post" enctype="multipart/form-data">
+    案例名称: <input type="text" id="name" name="name" required maxlength="50" size="10">
+    <br>
+    <br>
+    案例来源: <input type="text" id="source" name="source" required maxlength="50" size="10">
+    案例描述: <input type="text" id="description" name="description" required maxlength="500" size="10">
+    图片: <input type="file" id="file" name="file" >
+    <input type="submit" value="submit" onclick="submitClick()">
+
+</form>
+
+
+</body>
+</html>

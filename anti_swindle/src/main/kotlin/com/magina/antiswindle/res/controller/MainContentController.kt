@@ -2,12 +2,10 @@ package com.magina.antiswindle.res.model.controller
 
 import com.magina.antiswindle.common.ResponseBean
 import com.magina.antiswindle.const.Env
+import com.magina.antiswindle.res.model.Data
 import com.magina.antiswindle.res.model.ItemResource
 import com.magina.antiswindle.res.model.service.MainContentService
-import org.apache.tomcat.util.http.fileupload.FileUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties
-import org.springframework.core.io.InputStreamResource
 import org.springframework.core.io.Resource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -20,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import org.springframework.web.multipart.MultipartHttpServletRequest
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
-import kotlin.system.exitProcess
+import javax.servlet.http.HttpServletRequest
+
 
 /**
  * @description 文件描述
@@ -37,25 +36,48 @@ import kotlin.system.exitProcess
 @RequestMapping("/res")
 class MainContentController {
 
+
     @Autowired
     var resItemService: MainContentService? = null
 
     @RequestMapping("/all")
-    fun allRes(model:Model):String {
+    fun allRes(model: Model): String {
         val allItem = resItemService!!.showAll()
-        model.addAttribute("itemResults",allItem)
+        model.addAttribute("itemResults", allItem)
         return "listResItem"
     }
 
+    @RequestMapping("/page/add")
+    fun addItemPage(): String {
+        return "page_item_add"
+    }
 
-    @ResponseBody
+
     @RequestMapping("/add", method = arrayOf(RequestMethod.POST))
-    fun addRes(@RequestBody res: ItemResource): ResponseBean<Void> {
-        val result = resItemService!!.addRes(res)
-        if (result > 0) {
-            return ResponseBean.successWithNoData()
+    fun addRes(request: HttpServletRequest): String {
+        if (request is MultipartHttpServletRequest) {
+            val multipartRequest = request
+            // 通过表单中的参数名来接收文件流（可用 file.getInputStream() 来接收输入流）
+            val file = multipartRequest.getFile("file")
+
+            val imageName = file?.run {
+                saveImageFile(this)
+            }
+            // 接收其他表单参数
+            val name = multipartRequest.getParameter("name")
+            val source = multipartRequest.getParameter("source")
+            val description = multipartRequest.getParameter("description")
+            val data =
+                Data(Calendar.getInstance().time.toLocaleString(), source, name, description, "", null, imageName)
+            val result = resItemService!!.addRes(ItemResource(null, source, data))
+            if (result > 0) {
+                return "redirect:/res/all"
+            } else {
+                return "error"
+            }
+        } else {
+            return "error"
         }
-        return ResponseBean.fail(500, "server error")
     }
 
     @RequestMapping("/delete")
@@ -79,6 +101,16 @@ class MainContentController {
             return ResponseBean.fail(500, "更新失败:${e.message}")
         }
 
+    }
+
+    @RequestMapping("/item")
+    fun showSingleItem(id: Int): String {
+        val result = resItemService!!.queryRes(id)
+        if (result == null) {
+            return "error_not_found"
+        } else {
+            return "page_item_add"
+        }
     }
 
     @ResponseBody
@@ -113,9 +145,12 @@ class MainContentController {
     @ResponseBody
     @RequestMapping("/video/upload")
     fun uploadVideo(@RequestParam("myfile") myfile: MultipartFile): ResponseBean<Void> {
-        var originalFilename = myfile.originalFilename
-        val name = myfile.name
-        val size = myfile.size
+        saveImageFile(myfile)
+        return ResponseBean.successWithNoData()
+    }
+
+    fun saveImageFile(file: MultipartFile): String {
+        var originalFilename = file.originalFilename
         var extensionName = ""
         if (!originalFilename.isNullOrEmpty()) {
             extensionName = originalFilename.substring(originalFilename.lastIndexOf("."))
@@ -125,10 +160,8 @@ class MainContentController {
         if (!outputFile.exists()) {
             outputFile.createNewFile()
         }
-        FileCopyUtils.copy(myfile.inputStream, FileOutputStream(outputFile))
-        return ResponseBean.successWithNoData()
-
+        FileCopyUtils.copy(file.inputStream, FileOutputStream(outputFile))
+        return newFileName + extensionName
     }
-
 
 }
