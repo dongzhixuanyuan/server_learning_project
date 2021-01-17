@@ -8,7 +8,6 @@ import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import org.springframework.stereotype.Component
 import java.io.File
-import java.io.FileInputStream
 
 /**
  * @description 文件描述
@@ -47,7 +46,7 @@ class MainContentService {
 
 
     fun getVideo(videoUrl: String): Resource? {
-        val absolutePath = Env.BASE_DIR  + videoUrl
+        val absolutePath = Env.BASE_VIDEO_DIR  + videoUrl
         val videofile = File(absolutePath)
         if (videofile.exists()) {
             return FileSystemResource(absolutePath)

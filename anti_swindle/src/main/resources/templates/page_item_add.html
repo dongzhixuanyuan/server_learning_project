@@ -18,13 +18,28 @@
 </head>
 <body>
 <form action="/res/add" method="post" enctype="multipart/form-data">
-    案例名称: <input type="text" id="name" name="name" required maxlength="50" size="10">
+    案例名称: <input type="text" id="name" name="name" required maxlength="50" size="10" th:value="${item?.data?.title}">
     <br>
     <br>
-    案例来源: <input type="text" id="source" name="source" required maxlength="50" size="10">
-    案例描述: <input type="text" id="description" name="description" required maxlength="500" size="10">
-    图片: <input type="file" id="file" name="file" >
-    <input type="submit" value="submit" onclick="submitClick()">
+    案例来源: <input type="text" th:value="${item?.source_account}" id="source" name="source" required maxlength="50"
+                 size="10">
+    <br>
+    <br>
+    案例描述: <input type="text" th:value="${item?.data?.detail_content}" id="description" name="description" required
+                 maxlength="500" size="10">
+    <br>
+    <br>
+    图片: <input type="file" id="image" name="image">
+    <br>
+    <br>
+    视频: <input type="file" id="video" name="video">
+    <br>
+    <br>
+    <input type="text" id="type" name="type" th:value="${ item==null ? 'add':'update'}" hidden=hidden>
+    <div th:if="${item != null}">
+        <input  type="text" id="id" name="id" th:value="${item.id}" hidden="hidden">
+    </div>
+    <input type="submit" value="submit">
 
 </form>
 

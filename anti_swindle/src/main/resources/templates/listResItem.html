@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<link type="text/css" media="all" href="../static/css/style.css">
 <head>
     <meta charset="UTF-8" http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
     <title>内容页</title>
@@ -8,25 +9,26 @@
 <body>
 <h2>存在的资源</h2>
 
-<div style="width: 500px;margin: 20px auto;text-align: center">
+<div style="width: 1000px;margin: 20px auto;text-align: center">
     <table align="center" border="1" cellspacing="0">
         <tr>
             <td>id</td>
             <td>来源</td>
             <td>name</td>
             <td>des</td>
-            <td>图片/视频</td>
+            <td>图片</td>
+            <td>视频</td>
             <td>编辑</td>
             <td>删除</td>
         </tr>
-
         <tr th:each="r:${itemResults}">
             <td th:text="${r.id}"></td>
             <td th:text="${r.data?.source}"></td>
             <td th:text="${r.data?.title}"></td>
             <td th:text="${r.data?.getDetail_content()}"></td>
-            <td th:text="${r.data?.image}"></td>
-            <td><a th:href="@{/res/update(id=${r.id})}"></a>编辑</td>
+            <td > <a th:href="@{/res/image(path=${r.data?.image})}" target="_blank" th:text="${r.data?.image}"></a></td>
+            <td > <a th:href="@{/res/video(path=${r.data?.video})}" target="_blank" th:text="${r.data?.video}"></a></td>
+            <td><a th:href="@{/res/page/add(id=${r.id})}">编辑</a></td>
             <td><a th:href="@{/res/delete(id=${r.id})}"> 删除 </a></td>
         </tr>
 

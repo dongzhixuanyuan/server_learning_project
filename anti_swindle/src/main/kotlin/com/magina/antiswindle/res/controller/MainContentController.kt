@@ -2,8 +2,11 @@ package com.magina.antiswindle.res.model.controller
 
 import com.magina.antiswindle.common.ResponseBean
 import com.magina.antiswindle.const.Env
+import com.magina.antiswindle.const.FileType
 import com.magina.antiswindle.res.model.Data
+import com.magina.antiswindle.res.model.ImageModel
 import com.magina.antiswindle.res.model.ItemResource
+import com.magina.antiswindle.res.model.VideoModel
 import com.magina.antiswindle.res.model.service.MainContentService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.io.Resource
@@ -48,7 +51,11 @@ class MainContentController {
     }
 
     @RequestMapping("/page/add")
-    fun addItemPage(): String {
+    fun addItemPage(id: Int?, model: Model): String {
+        if (id != null) {
+            val itemResource = resItemService!!.queryRes(id)
+            model.addAttribute("item", itemResource)
+        }
         return "page_item_add"
     }
 
@@ -58,18 +65,53 @@ class MainContentController {
         if (request is MultipartHttpServletRequest) {
             val multipartRequest = request
             // 通过表单中的参数名来接收文件流（可用 file.getInputStream() 来接收输入流）
-            val file = multipartRequest.getFile("file")
+            val image = multipartRequest.getFile("image")
+            val video = multipartRequest.getFile("video")
 
-            val imageName = file?.run {
-                saveImageFile(this)
+            val imageName = image?.run {
+                saveMediaFile(this, FileType.IMAGE)
+            }
+            val videoName = video?.run {
+                saveMediaFile(this, FileType.VIDEO)
             }
             // 接收其他表单参数
             val name = multipartRequest.getParameter("name")
-            val source = multipartRequest.getParameter("source")
+            var source = multipartRequest.getParameter("source")
             val description = multipartRequest.getParameter("description")
+            val type = multipartRequest.getParameter("type")
             val data =
-                Data(Calendar.getInstance().time.toLocaleString(), source, name, description, "", null, imageName)
-            val result = resItemService!!.addRes(ItemResource(null, source, data))
+                Data(Calendar.getInstance().time.toLocaleString(), source, name, description, "", videoName, imageName)
+            var newItemRes = ItemResource(null, source, data)
+            val result = if ("add" == type) {
+                resItemService!!.addRes(newItemRes)
+            } else {
+                val resId = multipartRequest.getParameter("id")
+                if (!resId.isNullOrEmpty()) {
+                    val oldResource = resItemService!!.queryRes(resId.toInt())
+                    oldResource?.source_account = newItemRes.source_account
+                    oldResource?.data?.run {
+                        timestamp = data.timestamp
+                        this.source = data.source
+                        this.title = data.title
+                        this.detail_content = data.detail_content
+                        this.comment = data.comment
+                    }
+                    if (imageName?.isNotEmpty() == true) {
+                        oldResource?.data?.image = imageName
+                    }
+                    if (videoName?.isNotEmpty() == true) {
+                        oldResource?.data?.video = videoName
+                    }
+                    if (oldResource != null) {
+                        resItemService!!.updateRes(oldResource)
+                    } else {
+                        0
+                    }
+                } else {
+                    0
+                }
+
+            }
             if (result > 0) {
                 return "redirect:/res/all"
             } else {
@@ -145,18 +187,38 @@ class MainContentController {
     @ResponseBody
     @RequestMapping("/video/upload")
     fun uploadVideo(@RequestParam("myfile") myfile: MultipartFile): ResponseBean<Void> {
-        saveImageFile(myfile)
+        saveMediaFile(myfile, FileType.VIDEO)
         return ResponseBean.successWithNoData()
     }
 
-    fun saveImageFile(file: MultipartFile): String {
+    @RequestMapping("/image")
+    fun showImage(path: String, model: Model): String {
+        val imageModel = ImageModel("图片", path)
+        model.addAttribute("image", imageModel)
+        return "image_display"
+    }
+
+    @RequestMapping("/video")
+    fun showVideo(path: String, model: Model): String {
+        val videoModel = VideoModel("视频", path)
+        model.addAttribute("video", videoModel)
+        return "video_display"
+    }
+
+
+    fun saveMediaFile(file: MultipartFile, fileType: FileType): String {
+        if (file.isEmpty) return ""
         var originalFilename = file.originalFilename
         var extensionName = ""
         if (!originalFilename.isNullOrEmpty()) {
             extensionName = originalFilename.substring(originalFilename.lastIndexOf("."))
         }
         var newFileName = UUID.randomUUID().toString()
-        val outputFile = File(Env.BASE_DIR + newFileName + extensionName)
+        val outputFile = if (fileType == FileType.IMAGE) {
+            File(Env.BASE_IMAGE_DIR + newFileName + extensionName)
+        } else {
+            File(Env.BASE_VIDEO_DIR + newFileName + extensionName)
+        }
         if (!outputFile.exists()) {
             outputFile.createNewFile()
         }

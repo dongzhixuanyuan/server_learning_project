@@ -4,8 +4,6 @@ import com.magina.antiswindle.const.Env
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import java.text.DateFormat
-import java.util.*
 
 /**
  * @description 配置图片文件在电脑上的位置
@@ -20,7 +18,8 @@ class MyWebMvcConfigurerAdapter : WebMvcConfigurer {
      * @param registry
      */
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("/media/**").addResourceLocations("file:${Env.BASE_DIR}")
+        registry.addResourceHandler("/video/**").addResourceLocations("file:${Env.BASE_VIDEO_DIR}")
+        registry.addResourceHandler("/image/**").addResourceLocations("file:${Env.BASE_IMAGE_DIR}")
         super.addResourceHandlers(registry)
     }
 }

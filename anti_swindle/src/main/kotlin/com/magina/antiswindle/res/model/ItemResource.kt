@@ -26,6 +26,10 @@ class Data(
     constructor() : this(null, null, null, null, null, null, null)
 }
 
+
+class ImageModel(val title:String,val path:String)
+class VideoModel(val title:String,val path:String)
+
 //{
 //    "source_account": "深圳反诈",
 //    "data": {

@@ -10,3 +10,7 @@ div.showing {
 .odd {
     background-color: green;
 }
+
+.padding {
+    padding: 20px;
+}
