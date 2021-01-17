@@ -17,7 +17,8 @@ class User(
 )*/
 
 
-# DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `anti_swindle`;
 CREATE TABLE IF NOT EXISTS `user`
 (
     `id`         int(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -39,7 +40,8 @@ create table if not exists `anti_swindle`
     `title`          varchar(255),
     `detail_content` varchar(255),
     `comment`        varchar(255),
-    `video`          varchar(255)
+    `video`          varchar(255),
+    `image` varchar(255)
 ) engine = InnoDB
   charset = utf8;
 

@@ -1,6 +1,9 @@
 package com.magina.antiswindle.const
 
+import com.magina.antiswindle.DynamicConfig
 import org.apache.tomcat.util.http.fileupload.FileUtils
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 import java.io.File
 
 /**
@@ -9,17 +12,21 @@ import java.io.File
  * @author magina (735106520@qq.com)
  * @date 2020/12/13 5:48 下午
  */
-object Env {
+@Component
+class Env {
 
-    val BASE_VIDEO_DIR: String
+    @Autowired
+    var config:DynamicConfig? = null
+
+    var BASE_VIDEO_DIR: String? = null
         get() {
-            val dir = "/Users/liudong/反诈资料/video/"
+            val dir = config!!.video!!  //
             FileUtils.forceMkdir(File(dir))
             return dir
         }
-    val BASE_IMAGE_DIR:String
+    var BASE_IMAGE_DIR:String? = null
         get() {
-            val dir = "/Users/liudong/反诈资料/image/"
+            val dir = config!!.img!! //""
             FileUtils.forceMkdir(File(dir))
             return dir
         }

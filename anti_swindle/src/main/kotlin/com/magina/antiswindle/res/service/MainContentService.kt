@@ -44,15 +44,4 @@ class MainContentService {
         return resItemMapper!!.queryRes(id)
     }
 
-
-    fun getVideo(videoUrl: String): Resource? {
-        val absolutePath = Env.BASE_VIDEO_DIR  + videoUrl
-        val videofile = File(absolutePath)
-        if (videofile.exists()) {
-            return FileSystemResource(absolutePath)
-        } else {
-            return null
-        }
-    }
-
 }

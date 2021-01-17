@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
@@ -39,7 +40,8 @@ import javax.servlet.http.HttpServletRequest
 @RequestMapping("/res")
 class MainContentController {
 
-
+    @Autowired
+    var env:Env? = null;
     @Autowired
     var resItemService: MainContentService? = null
 
@@ -79,8 +81,9 @@ class MainContentController {
             var source = multipartRequest.getParameter("source")
             val description = multipartRequest.getParameter("description")
             val type = multipartRequest.getParameter("type")
+            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:MM:ss")
             val data =
-                Data(Calendar.getInstance().time.toLocaleString(), source, name, description, "", videoName, imageName)
+                Data(simpleDateFormat.format(Calendar.getInstance().time), source, name, description, "", videoName, imageName)
             var newItemRes = ItemResource(null, source, data)
             val result = if ("add" == type) {
                 resItemService!!.addRes(newItemRes)
@@ -167,24 +170,6 @@ class MainContentController {
     }
 
     @ResponseBody
-    @RequestMapping("/video/download")
-    fun downloadVideo(@RequestParam("video") videoUrl: String): ResponseEntity<Resource>? {
-        val videoFile = resItemService!!.getVideo(videoUrl)
-
-        val headers = HttpHeaders();
-        headers.add("Content-Disposition", String.format("attachment;filename=\"%s", videoUrl));
-        headers.add("Cache-Control", "no-cache,no-store,must-revalidate");
-        headers.add("Pragma", "no-cache");
-        headers.add("Expires", "0");
-
-        if (videoFile != null) {
-            return ResponseEntity.ok().headers(headers).contentLength(videoFile.contentLength())
-                .contentType(MediaType.parseMediaType("video/mp4")).body(videoFile)
-        }
-        return null
-    }
-
-    @ResponseBody
     @RequestMapping("/video/upload")
     fun uploadVideo(@RequestParam("myfile") myfile: MultipartFile): ResponseBean<Void> {
         saveMediaFile(myfile, FileType.VIDEO)
@@ -215,9 +200,9 @@ class MainContentController {
         }
         var newFileName = UUID.randomUUID().toString()
         val outputFile = if (fileType == FileType.IMAGE) {
-            File(Env.BASE_IMAGE_DIR + newFileName + extensionName)
+            File(env!!.BASE_IMAGE_DIR + newFileName + extensionName)
         } else {
-            File(Env.BASE_VIDEO_DIR + newFileName + extensionName)
+            File(env!!.BASE_VIDEO_DIR + newFileName + extensionName)
         }
         if (!outputFile.exists()) {
             outputFile.createNewFile()
