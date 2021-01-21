@@ -5,7 +5,16 @@
     <title>视频详情页</title>
 </head>
 <body>
-<video th:src="'/video/'+${video.path}" autoplay="autoplay"></video>
+<!--todo 视频外链和本机视频地址需要处理下-->
+ <video autoplay="autoplay">
 
+     <div th:if="${video.path.startsWith('http')}">
+
+     </div>
+
+ </video>
+
+
+<video   th:src="${video.path.startsWith('http') ? ${video.path} :'/video/'+${video.path}}" autoplay="autoplay"></video>
 </body>
 </html>

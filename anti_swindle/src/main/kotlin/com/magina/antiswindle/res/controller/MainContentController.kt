@@ -69,13 +69,19 @@ class MainContentController {
             // 通过表单中的参数名来接收文件流（可用 file.getInputStream() 来接收输入流）
             val image = multipartRequest.getFile("image")
             val video = multipartRequest.getFile("video")
+            val videoUrl = multipartRequest.getParameter("video_link")
 
             val imageName = image?.run {
                 saveMediaFile(this, FileType.IMAGE)
             }
-            val videoName = video?.run {
-                saveMediaFile(this, FileType.VIDEO)
+            val videoName = if (!videoUrl.isNullOrEmpty()) {
+                videoUrl
+            } else {
+                video?.run {
+                    saveMediaFile(this, FileType.VIDEO)
+                }
             }
+
             // 接收其他表单参数
             val name = multipartRequest.getParameter("name")
             var source = multipartRequest.getParameter("source")

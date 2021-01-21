@@ -35,9 +35,12 @@
     视频: <input type="file" id="video" name="video">
     <br>
     <br>
+    视频链接: <input type="text" id="video_link" name="video_link">
+    <br>
+    <br>
     <input type="text" id="type" name="type" th:value="${ item==null ? 'add':'update'}" hidden=hidden>
     <div th:if="${item != null}">
-        <input  type="text" id="id" name="id" th:value="${item.id}" hidden="hidden">
+        <input type="text" id="id" name="id" th:value="${item.id}" hidden="hidden">
     </div>
     <input type="submit" value="submit">
 
