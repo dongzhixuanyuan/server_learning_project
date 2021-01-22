@@ -13,7 +13,8 @@ class User(
     var phone: String,
     var password: String,
     var created_at: String?,
-    var updated_at: String?
+    var updated_at: String?,
+    var role:String?
 )
 
 class UserOauths(

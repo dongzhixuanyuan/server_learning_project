@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS `user`
     `phone`      varchar(255) UNIQUE NOT NULL DEFAULT '',
     `password`   varchar(255)        NOT NULL DEFAULT '',
     `created_at` TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP           NOT NULL DEFAULT '1970-01-01 08:00:02'
+    `updated_at` TIMESTAMP           NOT NULL DEFAULT '1970-01-01 08:00:02',
+    `role`       varchar(255) NOT NULL DEFAULT 'USER'
 ) engine = InnoDB
   charset = utf8;
 

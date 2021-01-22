@@ -25,6 +25,10 @@ class UserService {
         return userMapper!!.queryByPhone(phone)
     }
 
+    fun queryByName(username:String):User? {
+        return userMapper!!.queryByName(username)
+    }
+
     fun queryById(id:Int):User?{
         return userMapper!!.queryById(id)
     }

@@ -14,6 +14,9 @@ interface UserMapper {
     fun register(bean: User): Long
 
     fun queryByPhone(phone: String): User?
+
+    fun queryByName(username:String):User?
+
     fun queryById(id: Int): User?
 
     fun update(bean: User): Long
