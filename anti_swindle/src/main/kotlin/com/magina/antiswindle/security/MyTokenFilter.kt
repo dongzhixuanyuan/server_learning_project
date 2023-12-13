@@ -44,6 +44,7 @@ open class MyTokenFilter() : GenericFilterBean() {
                     }
                 }
             }
+            System.out.print("拦截器")
             chain.doFilter(request, response)
         }
 

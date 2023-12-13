@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+    <title>跨域配置测试页面</title>
+    <script>
+        // Function to fetch the URL
+        function fetchUrl() {
+          fetch('http://10.228.37.172:8080/user/index')
+            .then(response => response.text())
+            .then(data => {
+              // Handle the fetched data here
+              console.log(data);
+              var element = document.getElementById("test");
+                element.textContent = '接口成功:' + data;
+
+            })
+            .catch(error => {
+              // Handle any errors that occur during the fetch
+              console.error('Error:', error);
+               var element = document.getElementById("test");
+                element.textContent = '接口失败:' + error;
+            });
+        }
+    </script>
+</head>
+<body>
+<button onclick="fetchUrl()">请求接口</button>
+<h1 id="test">接口请求前：</h1>
+</body>
+</html>

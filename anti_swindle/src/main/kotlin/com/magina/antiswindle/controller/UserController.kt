@@ -2,18 +2,22 @@ package com.magina.antiswindle.controller
 
 import com.google.gson.Gson
 import com.google.gson.JsonElement
+import com.magina.antiswindle.security.CustomUserDetailsService
+import com.magina.antiswindle.security.TokenProvider
 import com.magina.antiswindle.user.User
 import com.magina.antiswindle.user.UserService
-import com.magina.antiswindle.security.TokenProvider
-import com.magina.antiswindle.security.CustomUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
+
 
 /**
  * @description 文件描述
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("/user")
+//@CrossOrigin(origins = ["*"])
 class UserController {
 
     @Autowired
@@ -39,6 +44,14 @@ class UserController {
 
     @RequestMapping("/index")
     fun index(): String {
+        val request = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes).request
+//        println(request.method)
+        var header = ""
+        for (item in request.headerNames) {
+            header += "${item}:${request.getHeader(item)}\n"
+
+        }
+        println(header)
         return "success"
     }
 
